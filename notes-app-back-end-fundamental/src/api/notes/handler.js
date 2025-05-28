@@ -4,7 +4,7 @@ class NotesHandler {
     this._service = service;
   }
 
-  postNoteHandler(request, h) {
+  postNoteHandler = (request, h) => {
     try {
       const { title = 'untitled', body, tags } = request.payload;
 
@@ -27,9 +27,9 @@ class NotesHandler {
       response.code(400);
       return response;
     }
-  }
+  };
 
-  getNotesHandler() {
+  getNotesHandler = () => {
     const notes = this._service.getNotes();
     return {
       status: 'success',
@@ -37,9 +37,9 @@ class NotesHandler {
         notes,
       },
     };
-  }
+  };
 
-  getNoteByIdHandler(request, h) {
+  getNoteByIdHandler = (request, h) => {
     try {
       const { id } = request.params;
       const note = this._service.getNoteById(id);
@@ -57,9 +57,9 @@ class NotesHandler {
       response.code(404);
       return response;
     }
-  }
+  };
 
-  putNoteByIdHandler(request, h) {
+  putNoteByIdHandler = (request, h) => {
     try {
       const { id } = request.params;
       this._service.editNoteById(id, request.payload);
@@ -76,9 +76,9 @@ class NotesHandler {
       response.code(404);
       return response;
     }
-  }
+  };
 
-  deleteNoteByIdHandler(request, h) {
+  deleteNoteByIdHandler = (request, h) => {
     try {
       const { id } = request.params;
       this._service.deleteNoteById(id);
@@ -95,7 +95,7 @@ class NotesHandler {
       response.code(404);
       return response;
     }
-  }
+  };
 }
 
 module.exports = NotesHandler;
