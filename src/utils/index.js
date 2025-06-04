@@ -1,4 +1,4 @@
-const mapDBtoModel = ({ id, title, body, tags, created_at, updated_at }) => ({
+const mapDBToModel = ({ id, title, body, tags, created_at, updated_at }) => ({
   id,
   title,
   body,
@@ -7,4 +7,4 @@ const mapDBtoModel = ({ id, title, body, tags, created_at, updated_at }) => ({
   updatedAt: updated_at,
 });
 
-module.exports = { mapDBtoModel };
+module.exports = { mapDBToModel };

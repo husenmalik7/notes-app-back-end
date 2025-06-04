@@ -1,9 +1,8 @@
-/* eslint-disable no-underscore-dangle */
+const { Pool } = require('pg');
 const { nanoid } = require('nanoid');
 const InvariantError = require('../../exceptions/InvariantError');
 const NotFoundError = require('../../exceptions/NotFoundError');
-const { Pool } = require('pg');
-const { mapDBtoModel } = require('../../utils');
+const { mapDBToModel } = require('../../utils');
 
 class NotesService {
   constructor() {
@@ -32,7 +31,7 @@ class NotesService {
 
   async getNotes() {
     const result = await this._pool.query('SELECT * FROM notes');
-    const mappedResult = result.rows.map(mapDBtoModel);
+    const mappedResult = result.rows.map(mapDBToModel);
     return mappedResult;
   }
 
@@ -48,13 +47,13 @@ class NotesService {
       throw new NotFoundError('Catatan tidak ditemukan');
     }
 
-    return result.rows.map(mapDBtoModel)[0];
+    return result.rows.map(mapDBToModel)[0];
   }
 
   async editNoteById(id, { title, body, tags }) {
     const updatedAt = new Date().toISOString();
     const query = {
-      text: `UPDATES notes SET title = $1, body = $2, tags = $3, updated_at = $4, WHERE id = %5 RETURNING id`,
+      text: 'UPDATE notes SET title = $1, body = $2, tags = $3, updated_at = $4 WHERE id = $5 RETURNING id',
       values: [title, body, tags, updatedAt, id],
     };
 
