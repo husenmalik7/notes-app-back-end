@@ -51,7 +51,7 @@ class AuthenticationsHandler {
   };
 
   deleteAuthenticationHandler = async (request, h) => {
-    this._validator.validateDeleteAuthenticationsPayload(request.payload);
+    this._validator.validateDeleteAuthenticationPayload(request.payload);
 
     const { refreshToken } = request.payload;
     await this._authenticationsService.verifyRefreshToken(refreshToken);
