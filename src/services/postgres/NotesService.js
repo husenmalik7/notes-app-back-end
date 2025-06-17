@@ -10,25 +10,6 @@ class NotesService {
     this._pool = new Pool();
   }
 
-  async verifyNoteOwner(id, owner) {
-    const query = {
-      text: 'SELECT * FROM notes WHERE id = $1',
-      values: [id],
-    };
-
-    const result = await this._pool.query(query);
-
-    if (!result.rows.length) {
-      throw new NotFoundError('Catatan tidak ditemukan');
-    }
-
-    const note = result.rows[0];
-
-    if (note.owner !== owner) {
-      throw new AuthorizationError('Anda tidak berhak mengakses resource ini');
-    }
-  }
-
   async addNote({ title, body, tags }) {
     const id = nanoid(16);
     const createdAt = new Date().toISOString();
@@ -98,6 +79,25 @@ class NotesService {
 
     if (!result.rows.length) {
       throw new NotFoundError('Catatan gagal dihapus. Id tidak ditemukan');
+    }
+  }
+
+  async verifyNoteOwner(id, owner) {
+    const query = {
+      text: 'SELECT * FROM notes WHERE id = $1',
+      values: [id],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rows.length) {
+      throw new NotFoundError('Catatan tidak ditemukan');
+    }
+
+    const note = result.rows[0];
+
+    if (note.owner !== owner) {
+      throw new AuthorizationError('Anda tidak berhak mengakses resource ini');
     }
   }
 }
