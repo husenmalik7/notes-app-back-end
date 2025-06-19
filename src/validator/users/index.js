@@ -3,10 +3,10 @@ const { UserPayloadSchema } = require('./schema');
 
 const UsersValidator = {
   validateUserPayload: (payload) => {
-    const validateResult = UserPayloadSchema.validate(payload);
+    const validationResult = UserPayloadSchema.validate(payload);
 
-    if (validateResult.error) {
-      throw new InvariantError(validateResult.error.message);
+    if (validationResult.error) {
+      throw new InvariantError(validationResult.error.message);
     }
   },
 };

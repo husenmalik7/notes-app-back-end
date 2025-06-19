@@ -3,10 +3,10 @@ const { CollaborationPayloadSchema } = require('./schema');
 
 const CollaborationsValidator = {
   validateCollaborationPayload: (payload) => {
-    const validateResult = CollaborationPayloadSchema.validate(payload);
+    const validationResult = CollaborationPayloadSchema.validate(payload);
 
-    if (validateResult.error) {
-      throw new InvariantError(validateResult.error.message);
+    if (validationResult.error) {
+      throw new InvariantError(validationResult.error.message);
     }
   },
 };
