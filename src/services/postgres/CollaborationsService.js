@@ -38,7 +38,7 @@ class CollaborationsService {
   }
 
   async verifyCollaborator(noteId, userId) {
-    await this.verifyRefreshToken(token);
+    // await this.verifyRefreshToken(token);
 
     const query = {
       text: 'SELECT * FROM collaborations WHERE note_id = $1 AND user_id = $2',
