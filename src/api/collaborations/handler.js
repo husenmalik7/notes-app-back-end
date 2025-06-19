@@ -11,7 +11,7 @@ class CollaborationsHandler {
     const { id: credentialId } = request.auth.credentials;
     const { noteId, userId } = request.payload;
 
-    await this._notesService.verifyNoteOwner(noteId, userId);
+    await this._notesService.verifyNoteOwner(noteId, credentialId);
     const collaborationId = await this._collaborationsService.addCollaboration(
       noteId,
       userId
@@ -33,8 +33,8 @@ class CollaborationsHandler {
     const { id: credentialId } = request.auth.credentials;
     const { noteId, userId } = request.payload;
 
-    await this._notesService.verifyNoteOwner(noteId, userId);
-    await this._collaborationsService.deleteCollaboration();
+    await this._notesService.verifyNoteOwner(noteId, credentialId);
+    await this._collaborationsService.deleteCollaboration(noteId, userId);
 
     return {
       status: 'success',
