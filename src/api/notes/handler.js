@@ -2,16 +2,9 @@ class NotesHandler {
   constructor(service, validator) {
     this._service = service;
     this._validator = validator;
-
-    this.postNoteHandler = this.postNoteHandler.bind(this);
-    this.getNotesHandler = this.getNotesHandler.bind(this);
-    this.getNoteByIdHandler = this.getNoteByIdHandler.bind(this);
-    this.putNoteByIdHandler = this.putNoteByIdHandler.bind(this);
-    this.deleteNoteByIdHandler = this.deleteNoteByIdHandler.bind(this);
-    this.getUsersByUsernameHandler = this.getUsersByUsernameHandler.bind(this);
   }
 
-  async postNoteHandler(request, h) {
+  postNoteHandler = async (request, h) => {
     this._validator.validateNotePayload(request.payload);
     const { title = 'untitled', body, tags } = request.payload;
     const { id: credentialId } = request.auth.credentials;
@@ -32,9 +25,9 @@ class NotesHandler {
     });
     response.code(201);
     return response;
-  }
+  };
 
-  async getNotesHandler(request) {
+  getNotesHandler = async (request, h) => {
     const { id: credentialId } = request.auth.credentials;
     const notes = await this._service.getNotes(credentialId);
     return {
@@ -43,9 +36,9 @@ class NotesHandler {
         notes,
       },
     };
-  }
+  };
 
-  async getNoteByIdHandler(request, h) {
+  getNoteByIdHandler = async (request, h) => {
     const { id } = request.params;
     const { id: credentialId } = request.auth.credentials;
 
@@ -57,9 +50,9 @@ class NotesHandler {
         note,
       },
     };
-  }
+  };
 
-  async putNoteByIdHandler(request, h) {
+  putNoteByIdHandler = async (request, h) => {
     this._validator.validateNotePayload(request.payload);
     const { id } = request.params;
     const { id: credentialId } = request.auth.credentials;
@@ -71,9 +64,9 @@ class NotesHandler {
       status: 'success',
       message: 'Catatan berhasil diperbarui',
     };
-  }
+  };
 
-  async deleteNoteByIdHandler(request, h) {
+  deleteNoteByIdHandler = async (request, h) => {
     const { id } = request.params;
     const { id: credentialId } = request.auth.credentials;
 
@@ -84,7 +77,7 @@ class NotesHandler {
       status: 'success',
       message: 'Catatan berhasil dihapus',
     };
-  }
+  };
 }
 
 module.exports = NotesHandler;
