@@ -17,31 +17,29 @@ class NotesService {
     const updatedAt = createdAt;
 
     const query = {
-      text: `INSERT INTO notes VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
+      text: 'INSERT INTO notes VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id',
       values: [id, title, body, tags, createdAt, updatedAt, owner],
     };
 
     const result = await this._pool.query(query);
-    const resultId = result.rows[0].id;
 
-    if (!resultId) {
+    if (!result.rows[0].id) {
       throw new InvariantError('Catatan gagal ditambahkan');
     }
 
-    return resultId;
+    return result.rows[0].id;
   }
 
   async getNotes(owner) {
     const query = {
       text: `SELECT notes.* FROM notes
-             LEFT JOIN collaborations ON collaborations.note_id = notes.id
-             WHERE notes.owner = $1 OR collaborations.user_id = $1
-             GROUP BY notes.id`,
+    LEFT JOIN collaborations ON collaborations.note_id = notes.id
+    WHERE notes.owner = $1 OR collaborations.user_id = $1
+    GROUP BY notes.id`,
       values: [owner],
     };
     const result = await this._pool.query(query);
-    const mappedResult = result.rows.map(mapDBToModel);
-    return mappedResult;
+    return result.rows.map(mapDBToModel);
   }
 
   async getNoteById(id) {
@@ -49,7 +47,6 @@ class NotesService {
       text: `SELECT * FROM notes WHERE id = $1`,
       values: [id],
     };
-
     const result = await this._pool.query(query);
 
     if (!result.rows.length) {
@@ -75,7 +72,7 @@ class NotesService {
 
   async deleteNoteById(id) {
     const query = {
-      text: `DELETE FROM notes WHERE id = $1 RETURNING id`,
+      text: 'DELETE FROM notes WHERE id = $1 RETURNING id',
       values: [id],
     };
 
@@ -91,15 +88,11 @@ class NotesService {
       text: 'SELECT * FROM notes WHERE id = $1',
       values: [id],
     };
-
     const result = await this._pool.query(query);
-
     if (!result.rows.length) {
       throw new NotFoundError('Catatan tidak ditemukan');
     }
-
     const note = result.rows[0];
-
     if (note.owner !== owner) {
       throw new AuthorizationError('Anda tidak berhak mengakses resource ini');
     }
@@ -112,10 +105,9 @@ class NotesService {
       if (error instanceof NotFoundError) {
         throw error;
       }
-
       try {
         await this._collaborationService.verifyCollaborator(noteId, userId);
-      } catch (error) {
+      } catch {
         throw error;
       }
     }
